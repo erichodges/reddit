@@ -28,7 +28,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#"><i class="fa fa-plus"></i>Submit Post</a></li>
+            <li class="active"><a href="#" ng-click="showForm = !showForm"><i class="fa fa-plus"></i>Submit Post</a></li>
             <li role="separator" class="divider"></li>
             <li>
               <a>
@@ -63,7 +63,7 @@
       </div>
     </nav>
   </div>
-  <div>
+  <div ng-show="showForm">
     <form name="postForm" ng-submit="submitPost(postForm.$valid)" novalidate>
       <div class="form-group" ng-class="{ 'has-error' : userPost.title.$invalid && !userPost.title.$pristine ,'has-success' : userPost.title.$valid }">
         <label class="control-label" for="title">Title:</label>
@@ -87,7 +87,7 @@
         <input type="text" id="description" name="description" class="form-control" ng-required="true" ng-model="userPost.description" placeholder='Description'>
         <p ng-show="userPost.description.$invalid && !userPost.description.$pristine" class="help-block">Enter a valid description.</p>
       </div>
-      <button type="submit" class="btn btn-primary" ng-disabled="userPost.$invalid">Add Post</button>
+      <button type="submit" ng-click = 'showForm = !showForm' class="btn btn-primary" ng-disabled="userPost.$invalid">Add Post</button>
     </form>
   </div>
   <div ng-repeat = 'post in userPosts' class= 'container' ng-style = "{'background-color': 'gray'}">

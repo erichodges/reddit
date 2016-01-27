@@ -14,6 +14,7 @@ angular.module('redditClone', []).controller('mainController', function($scope) 
     }
   };
 
+  $scope.showForm = false;
 
 });
 
