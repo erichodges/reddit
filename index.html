@@ -30,27 +30,16 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#" ng-click="showForm = !showForm"><i class="fa fa-plus"></i>Submit Post</a></li>
+            <li><a href="#" ng-click="showForm = !showForm"><i class="fa fa-plus"></i>Submit Post</a></li>
             <li role="separator" class="divider"></li>
             <li>
               <a>
-                <select ng-model="items">
-                  <option value="price">Price</option>
-                  <option value="rating">Rating</option>
+                <select ng-model="posts">
+                  <option value="votes">Sort by Votes</option>
+                  <option value="date">Sort by Dates</option>
+                  <option value="title">Sort by Title</option>
                 </select>
               </a>
-            </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li role="separator" class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -93,18 +82,17 @@
       <button type="submit" class="btn btn-primary" ng-disabled="userPost.$invalid">Add Post</button>
     </form>
   </div>
-
-
-
-  <div ng-repeat = 'post in userPosts' class= 'container' ng-style = "{'background-color': 'gray'}">
-  	<div class = 'row'>
+  <div ng-repeat = 'post in userPosts | orderBy: posts | filter: search' class= 'container' ng-style = "{'background-color': '#b9bcbd'}">
+  	<div class = 'row' ng-style = "{'margin:' '10px'}">
 	  	<div class= "col-xs-3">
 	  		<img ng-src="{{post.imageURL}}" width="150px">  		
 	  	</div>
   		<div>
-		  	<h5 class='col-xs-8 row'>{{post.title}} | </h5>
-		  	<h3>by: {{post.author}}</h3>
+		  	<h5 class='col-xs-9 row'>{{post.title}}</h5>
 		  	<p>{{post.description}}</p>  			
+		  	<h6>by: {{post.author}}</h6>
+		  	<a ng-click ="postScore + 1"><i class="fa fa-arrow-up"></i></a>{{postScore}}<a ng-click="postScore - 1"><i class="fa fa-arrow-down"></i></a>
+
   		</div>
   	</div>
     <div ng-show = 'addComment'>

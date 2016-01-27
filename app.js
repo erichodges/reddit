@@ -9,6 +9,7 @@ var app = angular.module('redditClone', ['ngAnimate', 'angularMoment']);
       window.scope = $scope;
 
 
+
       $scope.submitPost = function(isValid) {
         $scope.userPosts = $scope.userPosts || [];
           if (isValid) {
