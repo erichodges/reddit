@@ -90,12 +90,18 @@
       <button type="submit" class="btn btn-primary" ng-disabled="userPost.$invalid">Add Post</button>
     </form>
   </div>
-  <div ng-repeat = 'post in userPosts'>
-  	<!-- <img ng-src="{{post.imageURL}}" ng-style="{width: 80px, height: 80px}"> -->
-  	<img ng-src="{{post.imageURL}}" width="150px">
-  	<h1>{{post.title}} | </h1>
-  	<h3>by: {{post.author}}</h3>
-  	<p>{{post.description}}</p>
+  <div ng-repeat = 'post in userPosts' class= 'container' ng-style = "{'background-color': 'gray'}">
+  	<div class = 'row'>
+	  	<div class= "col-xs-3">
+	  		<img ng-src="{{post.imageURL}}" width="150px">  		
+	  	</div>
+  		<div>
+		  	<h5 class='col-xs-8 row'>{{post.title}} | </h5>
+		  	<h3>by: {{post.author}}</h3>
+		  	<p>{{post.description}}</p>  			
+  		</div>
+  	</div>
+
   </div>
 </body>
 
