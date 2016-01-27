@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="redditClone" ng-controller="mainController">
+<html lang="en" ng-app="redditClone">
 
 <head>
   <meta charset="UTF-8">
   <title>Reddit Clone</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.js"></script>
   <script src="app.js"></script>
-  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 
-<body class="container">
+<body class="container" ng-controller="mainController">
   <!-- Fixed navbar -->
   <div>
     <nav class="navbar navbar-default navbar-top">
@@ -63,6 +65,7 @@
       </div>
     </nav>
   </div>
+  <div >
   <div ng-show="showForm">
     <form name="postForm" ng-submit="submitPost(postForm.$valid)" novalidate>
       <div class="form-group" ng-class="{ 'has-error' : userPost.title.$invalid && !userPost.title.$pristine ,'has-success' : userPost.title.$valid }">
@@ -79,7 +82,7 @@
       </div>
       <div class="form-group" ng-class="{ 'has-error' : userPost.imageURL.$invalid && !userPost.imageURL.$pristine ,'has-success' : userPost.imageURL.$valid }">
         <label class="control-label" for="imageURL">Image URL</label>
-        <input type="URL" id="imageURL" name="imageURL" class="form-control" ng-required="true" ng-model="userPost.imageURL" placeholder='Image URL'>
+        <input type="text" id="imageURL" name="imageURL" class="form-control" ng-required="true" ng-model="userPost.imageURL" placeholder='Image URL'>
         <p ng-show="userPost.imageURL.$invalid && !userPost.imageURL.$pristine" class="help-block">Enter a valid image URL.</p>
       </div>
       <div class="form-group" ng-class="{ 'has-error' : userPost.description.$invalid && !userPost.description.$pristine ,'has-success' : userPost.description.$valid }">
@@ -87,9 +90,12 @@
         <input type="text" id="description" name="description" class="form-control" ng-required="true" ng-model="userPost.description" placeholder='Description'>
         <p ng-show="userPost.description.$invalid && !userPost.description.$pristine" class="help-block">Enter a valid description.</p>
       </div>
-      <button type="submit" ng-click = 'showForm = !showForm' class="btn btn-primary" ng-disabled="userPost.$invalid">Add Post</button>
+      <button type="submit" class="btn btn-primary" ng-disabled="userPost.$invalid">Add Post</button>
     </form>
   </div>
+
+
+
   <div ng-repeat = 'post in userPosts' class= 'container' ng-style = "{'background-color': 'gray'}">
   	<div class = 'row'>
 	  	<div class= "col-xs-3">
@@ -101,6 +107,23 @@
 		  	<p>{{post.description}}</p>  			
   		</div>
   	</div>
+    <div ng-show = 'addComment'>
+       <form name = 'commentForm' ng-submit='commentForm.$valid' novalidate>
+      <div class = 'form-group' ng-class="{ 'has-error' : commentForm.username.$invalid && !commentForm.username.$pristine ,'has-success' : commentForm.username.$valid }">
+        <label class = 'control-label for username'>Username</label>
+        <input autofocus type='text' name='username' ng-model='user.username' ng-required='true' id='username' ng-minlength='5' ng-maxlength='15'>
+        <p ng-show = 'commentForm.username.$error.minlength'>Name too short</p>
+        <p ng-show = 'commentForm.username.$error.maxlength'>Name too long</p>
+      </div>
+      <div ng-class="{ 'has-error' : commentForm.comment.$invalid && !commentForm.comment.$pristine ,'has-success' : commentForm.comment.$valid }">
+        <label class = 'control-label for comment'>Comment</label>
+        <input autofocus type='text' name='comment' ng-model='user.comment' ng-required='true' id='comment' ng-minlength='5' ng-maxlength='150'>
+      </div>
+      <button type = 'submit' class = 'btn btn-primary' ng-disabled = 'commentForm.$invalid'>Post Comment</button>
+    </form>
+    </div>
+  </div>
+    
 
   </div>
 </body>
