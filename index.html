@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="redditClone" ng-controller="mainController">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Reddit Clone</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.js"></script>
+  <script src="app.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body class="container">
+  <!-- Fixed navbar -->
+  <div>
+    <nav class="navbar navbar-default navbar-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Reddit Clone</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#"><i class="fa fa-plus"></i>Submit Post</a></li>
+            <li role="separator" class="divider"></li>
+            <li>
+              <a>
+                <select ng-model="items">
+                  <option value="price">Price</option>
+                  <option value="rating">Rating</option>
+                </select>
+              </a>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a>
+                <input name="search" type="search" ng-model="search" placeholder='search'>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <!--/.nav-collapse -->
+      </div>
+    </nav>
+  </div>
+  <div>
+    <form name="postForm" ng-submit="submitPost(postForm.$valid)" novalidate>
+      <div class="form-group" ng-class="{ 'has-error' : userPost.title.$invalid && !userPost.title.$pristine ,'has-success' : userPost.title.$valid }">
+        <label class="control-label" for="title">Title:</label>
+        <input autofocus type="text" name="title" class="form-control" ng-model="userPost.title" ng-required="true" id="title" ng-minlength="3" ng-maxlength="20" placeholder='Title'>
+        <p ng-show="userPost.title.$error.minlength" class="help-block">title is too short.</p>
+        <p ng-show="userPost.title.$error.maxlength" class="help-block">title is too long.</p>
+      </div>
+      <div class="form-group" ng-class="{ 'has-error' : userPost.author.$invalid && !userPost.author.$pristine ,'has-success' : userPost.author.$valid }">
+        <label class="control-label" for="author">Author</label>
+        <input type="author" name="author" class="form-control" ng-model="userPost.author" id="author" ng-minlength="3" ng-maxlength="12" ng-required="true" placeholder='Author'>
+        <p ng-show="userPost.author.$error.minlength" class="help-block">author is too short.</p>
+        <p ng-show="userPost.author.$error.maxlength" class="help-block">author is too long.</p>
+      </div>
+      <div class="form-group" ng-class="{ 'has-error' : userPost.imageURL.$invalid && !userPost.imageURL.$pristine ,'has-success' : userPost.imageURL.$valid }">
+        <label class="control-label" for="imageURL">Image URL</label>
+        <input type="URL" id="imageURL" name="imageURL" class="form-control" ng-required="true" ng-model="userPost.imageURL" placeholder='Image URL'>
+        <p ng-show="userPost.imageURL.$invalid && !userPost.imageURL.$pristine" class="help-block">Enter a valid image URL.</p>
+      </div>
+      <div class="form-group" ng-class="{ 'has-error' : userPost.description.$invalid && !userPost.description.$pristine ,'has-success' : userPost.description.$valid }">
+        <label class="control-label" for="description">Description</label>
+        <input type="text" id="description" name="description" class="form-control" ng-required="true" ng-model="userPost.description" placeholder='Description'>
+        <p ng-show="userPost.description.$invalid && !userPost.description.$pristine" class="help-block">Enter a valid description.</p>
+      </div>
+      <button type="submit" class="btn btn-primary" ng-disabled="userPost.$invalid">Add Post</button>
+    </form>
+  </div>
+  <div ng-repeat = 'post in userPosts'>
+  	<!-- <img ng-src="{{post.imageURL}}" ng-style="{width: 80px, height: 80px}"> -->
+  	<img ng-src="{{post.imageURL}}" width="150px">
+  	<h1>{{post.title}} | </h1>
+  	<h3>by: {{post.author}}</h3>
+  	<p>{{post.description}}</p>
+  </div>
+</body>
+
+</html>
