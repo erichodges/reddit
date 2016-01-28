@@ -7,7 +7,8 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="styles.css">
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/0.10.3/angular-moment.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.js"></script>
@@ -35,7 +36,7 @@
             <li>
               <a>
                 <select ng-model="posts">
-                  <option value="votes">Sort by Votes</option>
+                  <option value="-score">Sort by Votes</option>
                   <option value="date">Sort by Dates</option>
                   <option value="title">Sort by Title</option>
                 </select>
@@ -56,7 +57,7 @@
   </div>
   <div >
   <div ng-show="showForm">
-    <form name="postForm" ng-submit="submitPost(postForm.$valid)" novalidate>
+    <form name="postForm" ng-submit="submitPost(postForm)">
       <div class="form-group" ng-class="{ 'has-error' : userPost.title.$invalid && !userPost.title.$pristine ,'has-success' : userPost.title.$valid }">
         <label class="control-label" for="title">Title:</label>
         <input autofocus type="text" name="title" class="form-control" ng-model="userPost.title" ng-required="true" id="title" ng-minlength="3" ng-maxlength="20" placeholder='Title'>
@@ -82,36 +83,53 @@
       <button type="submit" ng-click='showForm = !showForm' class="btn btn-primary" ng-disabled="userPost.$invalid">Add Post</button>
     </form>
   </div>
-  <div ng-repeat='post in userPosts' class='container' ng-style="{'background-color': '#b9bcbd', 'border': '1px solid black'}">
+  <div ng-repeat='post in userPosts | orderBy: posts | filter : search' class='container' ng-style="{'background-color': '#b9bcbd', 'border': '1px solid black'}">
 
     <div class="col-xs-3">
       <img ng-src="{{post.imageURL}}" width="150px">
     </div>
-		<div class='col-xs-9 row'>
-	  	<h5 >{{post.title}}</h5>
-	  	<p>{{post.description}}</p>  			
-	  	<h6>by: {{post.author}}</h6>
-      <p><i class="fa fa-calendar"></i></p>
-      <p><i class="fa fa-comments"></i></i></p>
-      <p><i class="fa fa-commenting"></i></p>
-	  	<a ng-click ="postScore + 1"><i class="fa fa-arrow-up"></i></a>{{postScore}}<a ng-click="postScore - 1"><i class="fa fa-arrow-down"></i></a>
-		</div>
+  		<div class='col-xs-9 row'>
+  	  	<h5 >{{post.title}}</h5>
+  	  	<p>{{post.description}}</p>  			
+  	  	<h6>by: {{post.author}}</h6>
+        <p><i class="fa fa-calendar"></i>{{postForm.date}}</p>
+        <div>
+          <i class="fa fa-comments" ng-click = 'showComment = !showComment'>
+          <ng-pluralize count='comments.length'
+              when = "{'0': 'No comments',
+                       '1': 'One comment',
+                       'other': '{{comments.length}} comments'}">
+          </ng-pluralize count>
+          </i>
+        </div>
+
+        
+
+        <p ng-click = 'addComment = !addComment'><i class="fa fa-commenting"></i>Comment on This Post</p>
+  	  	<a ng-click ="increment(post)"><i class="fa fa-arrow-up"></i></a>{{post.score}}<a ng-click="decrement(post)"><i class="fa fa-arrow-down"></i></a>
+  		</div>
+      <div ng-show = 'addComment'>
+       <form name = 'commentForm' ng-submit='submitComment(commentForm)'>
+        <div class = 'form-group' ng-class="{ 'has-error' : commentForm.username.$invalid && !commentForm.username.$pristine ,'has-success' : commentForm.username.$valid }">
+          <label class = 'control-label for username'>Username</label>
+          <input autofocus type='text' name='username' ng-model='comment.username' ng-required='true' id='username' ng-minlength='5' ng-maxlength='15'>
+          <p ng-show = 'commentForm.username.$error.minlength'>Name too short</p>
+          <p ng-show = 'commentForm.username.$error.maxlength'>Name too long</p>
+        </div>
+        <div ng-class="{ 'has-error' : commentForm.comment.$invalid && !commentForm.comment.$pristine ,'has-success' : commentForm.comment.$valid }">
+          <label class = 'control-label for comment'>Comment</label>
+          <input autofocus type='text' name='comment' ng-model='comment.comment' ng-required='true' id='comment' ng-minlength='5' ng-maxlength='150'>
+        </div>
+        <button type = 'submit' class = 'btn btn-primary' ng-click = 'addComment = !addComment' ng-disabled = 'commentForm.$invalid'>Post Comment</button>
+        </form>
+      </div>
+      <div ng-show="showComment">
+        <div ng-repeat = 'comment in comments'>
+          <p><strong>{{comment.username}}:   </strong>{{comment.comment}}</p>
+        </div>
+      </div>
   	</div>
-    <div ng-show = 'addComment'>
-       <form name = 'commentForm' ng-submit='commentForm.$valid' novalidate>
-      <div class = 'form-group' ng-class="{ 'has-error' : commentForm.username.$invalid && !commentForm.username.$pristine ,'has-success' : commentForm.username.$valid }">
-        <label class = 'control-label for username'>Username</label>
-        <input autofocus type='text' name='username' ng-model='user.username' ng-required='true' id='username' ng-minlength='5' ng-maxlength='15'>
-        <p ng-show = 'commentForm.username.$error.minlength'>Name too short</p>
-        <p ng-show = 'commentForm.username.$error.maxlength'>Name too long</p>
-      </div>
-      <div ng-class="{ 'has-error' : commentForm.comment.$invalid && !commentForm.comment.$pristine ,'has-success' : commentForm.comment.$valid }">
-        <label class = 'control-label for comment'>Comment</label>
-        <input autofocus type='text' name='comment' ng-model='user.comment' ng-required='true' id='comment' ng-minlength='5' ng-maxlength='150'>
-      </div>
-      <button type = 'submit' class = 'btn btn-primary' ng-disabled = 'commentForm.$invalid'>Post Comment</button>
-    </form>
-    </div>
+
   </div>
 
   </div>
